@@ -5,8 +5,8 @@ const myDB = require('./connection');
 const fccTesting = require('./freeCodeCamp/fcctesting.js');
 const session = require('express-session');
 const passport = require('passport');
-const routes = require('./routes.js');
-const auth = require('./auth.js');
+//const routes = require('./routes.js');
+//const auth = require('./auth.js');
 
 const passportSocketIo = require('passport.socketio')
 const cookieParser = require('cookie-parser')
@@ -79,7 +79,7 @@ myDB(async client => {
   });
 
   app.route('/login').post(passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
-    res.redirect('/');
+    res.redirect('/profile');
   });
 
   app.route('/profile').get(ensureAuthenticated, (req,res) => {
