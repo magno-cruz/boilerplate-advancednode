@@ -60,30 +60,30 @@ myDB(async client => {
       title: 'Connected to Database',
       message: 'Please log in',
       showLogin: true,
-      showRegistration: true,
-	  showSocialAuth: true
+      //showRegistration: true,
+	  //showSocialAuth: true
     });
   });
-  app.route('/auth/github')
-  .post(passport.authenticate('github', (req,res) => {
-  }));
-  app.route('/auth/github/callback')
-  .post(passport.authenticate('github', { failureRedirect: '/' }), (req,res) => {
-    req.session.user_id = req.user.id
-	res.redirect('/chat');
-  });
+  //app.route('/auth/github')
+  //.post(passport.authenticate('github', (req,res) => {
+  //}));
+  //app.route('/auth/github/callback')
+  //.post(passport.authenticate('github', { failureRedirect: '/' }), (req,res) => {
+    //req.session.user_id = req.user.id
+	//res.redirect('/chat');
+  //});
 
-  app.route('/chat')
-  .post(passport.ensureAuthenticated('chat.pug', { user: req.user }), (req,res) => {
-    res.redirect('/profile');
-  });
+  //app.route('/chat')
+  //.post(passport.ensureAuthenticated('chat.pug', { user: req.user }), (req,res) => {
+    //res.redirect('/profile');
+  //});
 
   app.route('/login').post(passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
     res.redirect('/profile');
   });
 
-  app.route('/profile').get(ensureAuthenticated, (req,res) => {
-    res.render('profile', { username: req.user.username });
+  app.route('/profile').get((req,res) => {
+    res.render('profile');
   });
 
   app.route('/logout').get((req, res) => {
@@ -262,3 +262,5 @@ const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
 	console.log(`Listening on port ${PORT}`);
 });
+
+
