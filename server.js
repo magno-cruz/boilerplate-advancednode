@@ -170,7 +170,13 @@ myDB(async client => {
 
   app.route('/profile').get(ensureAuthenticated, (req,res) => {
     res.render('profile', { username: req.user.username });
-  });
+  }
+ 	    passport.authenticate('local', { failureRedirect: '/' }),
+    (req, res, next) => {
+      res.redirect('/profile');
+    }
+  ); 
+  ;
 
   passport.use(new LocalStrategy((username, password, done) => {
     myDataBase.findOne({ username: username }, (err, user) => {
