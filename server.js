@@ -52,46 +52,49 @@ io.use(
 
 myDB(async client => {
   const myDataBase = await client.db('database').collection('users');
+  
+  routes(app, myDataBase);
+  auth(app, myDataBase);
 
-
-  io.on('connection', socket => {
-	console.log('A user has connected');
-  });
-  	let currentUsers = 0;
-  	++currentUsers;
-  	io.emit('user', {
-		username: socket.request.user.username,
-		currentUsers,
-		connected: true
+  let currentUsers = 0;
+  io.on('connection', (socket) => {
+	++currentUsers;
+	io.emit('user', {
+	  username: socket.request.user.username,
+	  currentUsers,
+	  connected: true
 	});
+	socket.on('chat message', (message) => {
+		io.emit('chat message', { username: socket.request.user.username, message });
+  });
 
-	socket.on('user', function(data) {
-		console.log(data);
-	})
 
+  console.log('A user has connected');
+    
+      
+
+  	console.log('A user has disconnected');
 	socket.on('disconnect', () => {
-		username: socket.request.user.username,
+		console.log('A user has disconnected');
 		--currentUsers;
-		connected: false;
+		io.emit('user', {
+			username: socket.request.user.username,
+			currentUsers,
+			connected: false
 	  });
+	});
+});
 
 	socket.on('user', data => {
 		$('#num-users').text(data.currentUsers + ' users online');
 		let message = data.username + (data.connected ? ' has joined the chat.' : ' has left the chat.');
 		$('#messages').append($('<li>').html('<b>' + message + '</b>'));
 	});
-	
-  routes(app, myDataBase);
-  auth(app, myDataBase);
 }).catch(e => {
   app.route('/').get((req, res) => {
-    res.render('index', { title: e, message: 'Unable to connect to database' });
+    res.render('index', { title: 'Hello', message: 'Please log in' });
   });
 });
-  
-
-
-
 
 function onAuthorizeSuccess(data, accept) {
 	console.log('successful connection to socket.io');

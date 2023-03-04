@@ -12,8 +12,9 @@ module.exports = function (app, myDataBase) {
   });
   passport.deserializeUser((id, done) => {
       myDataBase.findOne({ _id: new ObjectID(id) }, (err, doc) => {
-          if (err) return console.error(err);
-          done(null, doc);
+          //if (err) return console.error(err);
+          //done(null, doc);
+		  done(null, null);
       });
   });
   passport.use(new LocalStrategy((username, password, done) => {

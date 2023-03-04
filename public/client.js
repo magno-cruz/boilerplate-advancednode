@@ -5,9 +5,9 @@ $(document).ready(function () {
   $('form').submit(function () {
     var messageToSend = $('#m').val();
 
-    
-	$('chat message').val('');
 	socket.emit('chat message', messageToSend);
+
+	$('chat message').val('');
     return false; // prevent form submit from refreshing page
   });
 });
