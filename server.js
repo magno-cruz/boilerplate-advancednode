@@ -152,21 +152,23 @@ app.use(express.urlencoded({ extended: true }));
 myDB(async client => {
   const myDataBase = await client.db('database').collection('users');
 
+  // Be sure to change the title
   app.route('/').get((req, res) => {
+    //Change the response to render the Pug template
     res.render('index', {
       title: 'Connected to Database',
-      message: 'Please log in',
+      message: 'Please login',
       showLogin: true
     });
   });
 
   app.route('/login').post(passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
     res.redirect('/profile');
-  })
+  });
 
   app.route('/profile').get(ensureAuthenticated, (req,res) => {
-    res.render('profile');
-  })
+    res.render('profile', { username: req.user.username });
+  });
 
   passport.use(new LocalStrategy((username, password, done) => {
     myDataBase.findOne({ username: username }, (err, user) => {
