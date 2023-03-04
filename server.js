@@ -164,7 +164,7 @@ myDB(async client => {
     res.redirect('/profile');
   })
 
-  app.route('/profile').get((req,res) => {
+  app.route('/profile').get(ensureAuthenticated, (req,res) => {
     res.render('profile');
   })
 
@@ -193,6 +193,13 @@ myDB(async client => {
     res.render('index', { title: e, message: 'Unable to connect to database' });
   });
 });
+
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
+};
   
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
