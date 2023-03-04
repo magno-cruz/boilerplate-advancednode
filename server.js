@@ -168,6 +168,10 @@ myDB(async client => {
     res.render('profile');
   })
 
+  app.route('/profile').get(ensureAuthenticated, (req,res) => {
+    res.render('profile', { username: req.user.username });
+  });
+
   passport.use(new LocalStrategy((username, password, done) => {
     myDataBase.findOne({ username: username }, (err, user) => {
       console.log(`User ${username} attempted to log in.`);
@@ -198,3 +202,10 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
 });
+
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/');
+};
