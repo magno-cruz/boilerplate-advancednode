@@ -12,10 +12,10 @@ module.exports = function (app, myDataBase) {
     });
   });
   app.route('/auth/github')
-  .post(passport.authenticate('github', (req,res) => {
+  .get(passport.authenticate('github', (req,res) => {
   }));
   app.route('/auth/github/callback')
-  .post(passport.authenticate('github', { failureRedirect: '/' }), (req,res) => {
+  .get(passport.authenticate('github', { failureRedirect: '/' }), (req,res) => {
     req.session.user_id = req.user.id
 	res.redirect('/chat');
   });
