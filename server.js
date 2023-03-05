@@ -52,10 +52,6 @@ io.use(
 
 myDB(async client => {
   const myDataBase = await client.db('database').collection('users');
-  
- 
-  
-  
   routes(app, myDataBase);
   auth(app, myDataBase);
 
@@ -66,28 +62,6 @@ myDB(async client => {
 	console.log('A user has connected');
   });
 
-
-  console.log('A user has connected');
-    
-
-
-  	console.log('A user has disconnected');
-	socket.on('disconnect', () => {
-		console.log('A user has disconnected');
-		--currentUsers;
-		io.emit('user', {
-			username: socket.request.user.username,
-			currentUsers,
-			connected: false
-	  });
-	});
-});
-
-	socket.on('user', data => {
-		$('#num-users').text(data.currentUsers + ' users online');
-		let message = data.username + (data.connected ? ' has joined the chat.' : ' has left the chat.');
-		$('#messages').append($('<li>').html('<b>' + message + '</b>'));
-	});
 }).catch(e => {
   app.route('/').get((req, res) => {
     res.render('index', { title: 'Hello', message: 'Please log in' });
